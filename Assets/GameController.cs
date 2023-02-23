@@ -9,12 +9,16 @@ public class GameController : MonoBehaviour
 
     public float currentPlayerMoney;
     public float baseIncome;
+    public GameObject[] purchasablePackages;
+    public float[] purchasablePackagesPrices;
 
     public GameObject[] menus;
     //public GameObject furnitureMenu;
     //public GameObject cryptoMenu;
 
     public GameObject[] uiPrompts;
+
+
 
 
 
@@ -28,6 +32,11 @@ public class GameController : MonoBehaviour
     public Text[] cryptoPriceText;
     public int[] holdings;
     public Text[] holdingsText;
+
+    public GameObject[] cameraPoints;
+    private int currentCameraPoint = 0;
+
+    public GameObject[] computerObjects;
 
     void Start()
     {
@@ -127,11 +136,17 @@ public class GameController : MonoBehaviour
 
     }
 
+    public void CloseMenu(int i)
+    {
+        menus[i].SetActive(false);
+
+    }
+
     public void FluctuateCrypto()
     {
         for( int i = 0; i < cryptoPrice.Length; i++)
         {
-            float randomNumber = Random.Range(-10, 11);
+            float randomNumber = Random.Range(-20, 21);
 
             randomNumber = randomNumber / 100;
             
@@ -143,6 +158,9 @@ public class GameController : MonoBehaviour
             }
 
             cryptoPriceText[i].text = cryptoPrice[i].ToString("0.00");
+
+
+            Debug.Log("crypto fluctuated");
 
         }
     }
@@ -197,6 +215,95 @@ public class GameController : MonoBehaviour
 
         }
     }
+
+    public void PurchaseFurniture(int i)
+    {
+        if (currentPlayerMoney < purchasablePackagesPrices[i])
+        {
+            // UI message showing player can't purchase it.
+        }
+        else
+        {
+            purchasablePackages[i].SetActive(true);
+
+        }
+
+    }
+
+
+    public void NextCamera()
+    {
+        if(currentCameraPoint >= 6)
+        {
+            Debug.Log("can't go above camera point 6");
+        }
+        else
+        {
+            cameraPoints[currentCameraPoint].SetActive(false);
+
+            cameraPoints[currentCameraPoint + 1].SetActive(true);
+
+            currentCameraPoint = currentCameraPoint + 1;
+        }
+        
+
+
+    }
+
+    public void PreviousCamera()
+    {
+        if(currentCameraPoint<= 0)
+        {
+            Debug.Log("can't go below camerapoint 0");
+
+        }
+        else
+        {
+            cameraPoints[currentCameraPoint].SetActive(false);
+
+            cameraPoints[currentCameraPoint - 1].SetActive(true);
+
+            currentCameraPoint = currentCameraPoint - 1;
+        }
+
+
+    }
+
+    public void SelectCamera(int i)
+    {
+        cameraPoints[currentCameraPoint].SetActive(false);
+        cameraPoints[i].SetActive(true);
+
+    }
+
+    private void Update()
+    {
+        if (currentCameraPoint == 5 && computerObjects[3].activeSelf == false)
+        {
+            computerObjects[0].SetActive(true);
+        }
+        else
+        {
+            computerObjects[0].SetActive(false);
+        }
+    }
+
+    public void DisableComputer()
+    {
+        computerObjects[1].SetActive(true);
+        computerObjects[2].SetActive(true);
+        computerObjects[3].SetActive(false);
+
+    }
+
+    public void EnableComputer()
+    {
+        computerObjects[1].SetActive(false);
+        computerObjects[2].SetActive(false);
+        computerObjects[3].SetActive(true);
+
+    }
+
 
 }
 
